@@ -1,0 +1,117 @@
+---
+title: "Toronto Dinesafe Open data"
+subtitle: "A public health environment that is constantly improving"
+author: 
+  - Tianen (Evan) Hao
+thanks: "Code and data are available at: https://github.com/ShadyEvan4830/DataAnalysis_TorontoOpenData.git."
+date: January 14, 2024
+date-format: long
+abstract: "This report will analyze publicly available data made available to the public by Toronto City Hall. Hygiene indicators in public catering have been under serious scrutiny from the public for many years. Excellent catering hygiene conditions will drive the common development of society and economy."
+format: pdf
+number-sections: true
+bibliography: bibliography.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(palmerpenguins)
+```
+
+
+# Introduction
+
+Toronto’s vibrant dining scene is a cornerstone of the city’s culture and economy, which is why residents and visitors require strict health screenings to ensure public safety. This report examines the Dinesafe data set provided by Toronto Public Data through the data analysis software R to conduct a comprehensive analysis of Toronto restaurant hygiene pass rates and Infractions. We further focus on the lowest inspection counts that are most frequent each year, revealing patterns that shed light on the city's public health standards. 
+
+
+
+# Data Analysis
+
+The Dinesafe dataset is publicly available from the City of Toronto [@TorontoDineSafe2021] and covers several years, with key variables such as establishment type, inspection dates, and infraction details. Prior to analysis, we resolved missing data and extracted relevant temporal components for annual trend analysis.
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+
+dataset <- read_csv("/cloud/project/data/Dinesafe.csv")
+
+status_count <- dataset %>%
+  group_by(`Establishment Status`) %>%
+  summarize(Count = n())
+
+ggplot(status_count, aes(x = `Establishment Status`, y = Count)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Number of Establishments by Status",
+       x = "Establishment Status", y = "Count")
+```
+
+We extracted the complete data through R and classified the number of institutions by Establishment Status in Dinesafe dataset [@TorontoDineSafe2021], specifically showing two categories: "Conditional Pass" and "Pass". Taken together the count for the immediate "Pass" category is significantly higher, indicated by the higher bar on the right, indicating that more businesses are fully compliant with health inspection standards than those receiving a "Conditional Pass". "Conditional pass" indicates that a certain number of businesses must address certain issues to fully comply with health standards. This visual demonstrates that the majority of businesses inspected are adhering to the required health and safety guidelines, which is very good news for the Toronto public.
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(lubridate)
+
+dataset <- read_csv("/cloud/project/data/Dinesafe.csv")
+
+dataset <- dataset %>%
+  mutate(InspectionYear = year(ymd(`Inspection Date`)))
+
+total_infractions_yearly <- dataset %>%
+  filter(!is.na(`Infraction Details`)) %>%
+  group_by(InspectionYear) %>%
+  summarize(TotalInfractions = n())
+
+g1 <- ggplot(total_infractions_yearly, aes(x = InspectionYear, y = TotalInfractions)) +
+  geom_line() +
+  theme_minimal() +
+  labs(title = "Total Infractions Per Year",
+       x = "Year", y = "Total Infractions")
+
+g1
+```
+
+Furthermore, we created a line chart by analyzing the number of Total Infractions in the data set over the years. It can be clearly seen from the chart that the total number of violations judged by catering companies each year has begun to show a downward trend after the early cycle of 2023; this shows that Toronto's public health safety is becoming excellent and more secure for people's health.
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(stringr)
+
+dataset <- read_csv("/cloud/project/data/Dinesafe.csv")
+
+dataset <- dataset %>%
+  mutate(Severity = case_when(
+    Severity == "NA - Not Applicable" ~ "Not Applicable",
+    TRUE ~ str_remove(Severity, "^[A-Z]+ - ")
+  ))
+
+severity_counts <- dataset %>%
+  filter(Severity != "Not Applicable") %>%
+  count(Severity, name = "Total_Count")
+
+severity_counts
+```
+
+Finally, we conduct statistical analysis on the extent of these Total Infractions companies. The results show that most of the businesses with violations are at the "Minor" level (27792); this means that their violations of the hygiene assessment are minor and can be improved and reach the passing standard in a relatively faster time, which is a positive representation of Infractions The overall trend can improve faster. Despite this, data shows that 14,260 companies still face "Significant" level of sanitation infractions; this means that they may need to spend more time and cost to improve sanitation conditions to provide better protection to the public.
+
+# Discussion and Conclusion
+
+In summary, the purpose of this report is to examine the Dinesafe data set provided by Toronto Public Data [@TorontoDineSafe2021] through the statistical programming language R [@citeR] to conduct a comprehensive analysis of Toronto restaurant hygiene pass rates and Infractions. Include packages @AER, @future, @gitcreds, @knitr, @lintr, @renv, @reprex, @styler, @tictoc, @tidyverse, @tinytex, and @usethis.
+
+Analysis of data sets through R and analysis of trends over time provide a valuable perspective for assessing the effectiveness of public health policies. We found that the number of infractions in Toronto restaurants is declining year over year, which means more restaurants are meeting health standards and open to the public. The highest proportion of restaurants that failed were rated "minor," indicating that more restaurants have the opportunity to improve their hygiene in a short period of time to comply with Toronto Health standards. Taken together, the above information is a very positive feedback for Toronto residents and tourists because Toronto's public restaurants are becoming healthy and standardized and increasing in number to promote economic development.
+
+Through the analysis of the Torotno DineSafe data set, cleaning and categorizing the "severity" data allows us to conduct more granular analysis, such as in this report, making it more clear to highlight the extent of specific areas of food safety that require improvement. Distributed so that people can better analyze the hygiene status of the restaurant industry.
+
+While this report provides a handful of solid insights, it also acknowledges the limitations of the dataset, such as potential reporting bias and missing values that may exist in the dataset. Future research could incorporate longitudinal data analysis to capture the evolution of compliance and noncompliance. In addition, this report is only a simple analysis produced for INF312 TUT2, missing many more aspects and details of description and judgment; therefore, if more accurate results are needed for the current hygiene and health of restaurants in Toronto, a more detailed and professional analysis is required. 
+\newpage
+
+# References
+
