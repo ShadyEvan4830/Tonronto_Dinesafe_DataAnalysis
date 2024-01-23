@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Download and read Dinesafe and CPI datas from OpenDataToronto
+# Purpose: Download and read Dinesafe and CPI data from OpenDataToronto
 # Author: Tianen (Evan) Hao
 # Date: 14 January 2024
 # Contact: evan4830@gmail.com
