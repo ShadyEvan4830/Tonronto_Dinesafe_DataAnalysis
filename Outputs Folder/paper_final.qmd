@@ -50,7 +50,7 @@ library(dplyr)
 library(knitr)
 library(kableExtra)
 
-dataset <- read_csv("/cloud/project/Inputs Folder/Data/Clean_Dinesafe_Data.csv")
+dataset <- read_csv("Inputs Folder/Data/Clean_Dinesafe_Data.csv")
 
 sample_dataset <- dataset %>%
   select(`Establishment Status`, `Min. Inspections Per Year`, Severity) %>%
@@ -77,7 +77,7 @@ The report extracted the complete data through R and classified the number of in
 #| fig-cap: Number of Establishments by Status
 library(tidyverse)
 
-dataset <- read_csv("/cloud/project/Inputs Folder/Data/Clean_Dinesafe_Data.csv")
+dataset <- read_csv("Inputs Folder/Data/Clean_Dinesafe_Data.csv")
 
 status_count <- dataset %>%
   group_by(`Establishment Status`) %>%
@@ -144,7 +144,7 @@ library(ggplot2)
 library(dplyr)
 library(readr)  # readr is used for read_csv
 
-dataset <- read_csv("/cloud/project/Inputs Folder/Data/Clean_Dinesafe_Data.csv")
+dataset <- read_csv("Inputs Folder/Data/Clean_Dinesafe_Data.csv")
 
 selected_severity_levels <- c("C - Crucial", "M - Minor", "NA - Not Applicable", "S - Significant")
 top_types <- dataset %>%
@@ -178,7 +178,7 @@ library(ggplot2)
 library(dplyr)
 library(lubridate)
 
-dataset <- read_csv("/cloud/project/Inputs Folder/Data/Clean_Dinesafe_Data.csv")
+dataset <- read_csv("Inputs Folder/Data/Clean_Dinesafe_Data.csv")
 
 minor_severity_actions <- dataset %>%
   filter(Severity == "M - Minor") %>%
@@ -210,14 +210,14 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 
-cpi_data <- read_csv("/cloud/project/Inputs Folder/Data/Clean_CPI_Data.csv") %>%
+cpi_data <- read_csv("Inputs Folder/Data/Clean_CPI_Data.csv") %>%
   filter(measure_name == "CPI - Consumer Price Index - Toronto (% Change)") %>%
   rename(CPI = measure_value) %>%
   mutate(Year = as.numeric(year)) %>%
   group_by(Year) %>%
   summarize(Average_CPI = mean(CPI, na.rm = TRUE))
 
-dataset <- read_csv("/cloud/project/Inputs Folder/Data/Clean_Dinesafe_Data.csv") %>%
+dataset <- read_csv("Inputs Folder/Data/Clean_Dinesafe_Data.csv") %>%
   mutate(Inspection_Date = as.Date(`Inspection Date`, format = "%Y-%m-%d")) %>%
   mutate(Year = as.numeric(format(Inspection_Date, "%Y"))) %>%
   group_by(Year) %>%
@@ -272,7 +272,7 @@ library(readr)
 library(tidyr)
 library(knitr)
 
-file_path <- "/cloud/project/Inputs Folder/Data/Clean_Dinesafe_Data.csv"
+file_path <- "Inputs Folder/Data/Clean_Dinesafe_Data.csv"
 dataset <- read_csv(file_path)
 
 processed_dataset <- dplyr::select(dataset, 
@@ -304,7 +304,7 @@ Considering the huge content of the data set, this appendix contains a preview o
 #| message: false
 #| warning: false
 
-file_path <- "/cloud/project/Inputs Folder/Data/Clean_CPI_Data.csv"
+file_path <- "Inputs Folder/Data/Clean_CPI_Data.csv"
 
 cpi_data <- read_csv(file_path)
 
